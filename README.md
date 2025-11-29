@@ -34,91 +34,75 @@ At the receiver, each signal is recovered by multiplying the multiplexed signal 
 
 PROGRAM
 ~~~~
-clc; 
-clear; 
+clc;
+clear;
 close;
 
-fs = 50000;
-t = 0:1/fs:0.05;
+fs = 25000;              
+t = 0:1/fs:0.04;        
 
-m1 = 1.7*sin(2*%pi*163*t);
-m2 = 1.8*sin(2*%pi*173*t);
-m3 = 1.9*sin(2*%pi*183*t);
-m4 = 2.0*sin(2*%pi*193*t);
-m5 = 2.1*sin(2*%pi*203*t);
-m6 = 2.2*sin(2*%pi*213*t);
+fm = [80, 160, 240, 320, 400, 480]; 
+m = [];
 
-c1 = cos(2*%pi*2000*t);
-c2 = cos(2*%pi*4000*t);
-c3 = cos(2*%pi*6000*t);
-c4 = cos(2*%pi*8000*t);
-c5 = cos(2*%pi*10000*t);
-c6 = cos(2*%pi*12000*t);
+for i = 1:6
+    m(i, :) = sin(2*%pi*fm(i)*t);
+end
 
-s1 = m1 .* c1;
-s2 = m2 .* c2;
-s3 = m3 .* c3;
-s4 = m4 .* c4;
-s5 = m5 .* c5;
-s6 = m6 .* c6;
+fc = [2500, 3500, 4500, 5500, 6500, 7500];
 
-fdm = s1 + s2 + s3 + s4 + s5 + s6;
+fdm = zeros(1, length(t));
+for i = 1:6
+    c = cos(2*%pi*fc(i)*t);
+    s = m(i, :) .* c;
+    fdm = fdm + s;
+end
 
-r1 = fdm .* c1;
-r2 = fdm .* c2;
-r3 = fdm .* c3;
-r4 = fdm .* c4;
-r5 = fdm .* c5;
-r6 = fdm .* c6;
+scf(1);
+clf;
+for i = 1:6
+    subplot(6,1,i);
+    plot(t, m(i, :));
+end
 
+scf(2);
+clf;
+plot(t, fdm);
 
-cutoff_hz = 400;
-norm_cutoff = cutoff_hz/(fs/2);
+demod = [];
+for i = 1:6
+    c = cos(2*%pi*fc(i)*t);
+    x = fdm .* c;
+    h = ones(1,100)/100;
+    y = conv(x, h, 'same');
+    demod(i, :) = y;
+end
 
-M = 101; 
+scf(3);
+clf;
+for i = 1:6
+    subplot(6,1,i);
+    plot(t, demod(i, :));
+end
 
-[h, w] = wfir('lp', M, [norm_cutoff, 0], 'hm', 0);  
+disp("FDM and Demultiplexing completed with NEW frequencies!");
 
-d1 = conv(r1, h, 'same');
-d2 = conv(r2, h, 'same');
-d3 = conv(r3, h, 'same');
-d4 = conv(r4, h, 'same');
-d5 = conv(r5, h, 'same');
-d6 = conv(r6, h, 'same');
-
-d1 = 2 * d1;
-d2 = 2 * d2;
-d3 = 2 * d3;
-d4 = 2 * d4;
-d5 = 2 * d5;
-d6 = 2 * d6;
-
-figure(1);
-subplot(3,2,1); plot(t,m1); title("Message 1");
-subplot(3,2,2); plot(t,m2); title("Message 2");
-subplot(3,2,3); plot(t,m3); title("Message 3");
-subplot(3,2,4); plot(t,m4); title("Message 4");
-subplot(3,2,5); plot(t,m5); title("Message 5");
-subplot(3,2,6); plot(t,m6); title("Message 6");
-
-figure(2);
-plot(t,fdm); title("Multiplexed FDM");
-
-figure(3);
-subplot(3,2,1); plot(t,d1); title("Demod 1");
-subplot(3,2,2); plot(t,d2); title("Demod 2");
-subplot(3,2,3); plot(t,d3); title("Demod 3");
-subplot(3,2,4); plot(t,d4); title("Demod 4");
-subplot(3,2,5); plot(t,d5); title("Demod 5");
-subplot(3,2,6); plot(t,d6); title("Demod 6");
 ~~~~~
 OUTPUT WAVEFORM
 
-<img width="1920" height="1200" alt="Screenshot (128)" src="https://github.com/user-attachments/assets/9bf00d41-ff4b-4e30-a2c0-6a8ed871160c" />
-<img width="1920" height="1200" alt="Screenshot (130)" src="https://github.com/user-attachments/assets/94c51e89-5214-47aa-940e-cc270af49ef9" />
-<img width="1920" height="1200" alt="Screenshot (129)" src="https://github.com/user-attachments/assets/59a6d872-3882-4ed9-acaf-604140b73b91" />
+<img width="1920" height="1200" alt="Screenshot (133)" src="https://github.com/user-attachments/assets/235ebd6b-b1bf-4075-8cb4-1b1d32484e1a" />
+
+<img width="1920" height="1200" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/3a61174e-5517-43c6-8e61-7e3e9d93bb89" />
+
+<img width="1920" height="1200" alt="Screenshot (135)" src="https://github.com/user-attachments/assets/ad3fb743-f2d8-4f65-a3c3-5878aca0ece4" />
+
 
 CALCULATION
+
+![WhatsApp Image 2025-11-29 at 14 14 59_5b0a1174](https://github.com/user-attachments/assets/cdcda932-4ee1-48c0-89e1-0f600dd2dcc0)
+
+![WhatsApp Image 2025-11-29 at 14 14 59_ea1ca2fe](https://github.com/user-attachments/assets/5f976da1-d7c4-4ce6-8288-dd35279fcdc6)
+
+
 
 RESULT
 
