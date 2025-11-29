@@ -98,9 +98,9 @@ OUTPUT WAVEFORM
 
 CALCULATION
 
-![WhatsApp Image 2025-11-29 at 14 14 59_5b0a1174](https://github.com/user-attachments/assets/cdcda932-4ee1-48c0-89e1-0f600dd2dcc0)
+![WhatsApp Image 2025-11-29 at 15 48 27_02101dc7](https://github.com/user-attachments/assets/7a252488-4dfc-4694-b61c-049aed7c5097)
 
-![WhatsApp Image 2025-11-29 at 14 14 59_ea1ca2fe](https://github.com/user-attachments/assets/5f976da1-d7c4-4ce6-8288-dd35279fcdc6)
+![WhatsApp Image 2025-11-29 at 15 48 28_798aacf8](https://github.com/user-attachments/assets/1e07f184-9ca3-4352-897a-1c899c8e6507)
 
 
 
